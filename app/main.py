@@ -1,11 +1,13 @@
 import os, re, base64, httpx
 from fastapi import FastAPI, File, UploadFile, HTTPException, Security
 from fastapi.security.api_key import APIKeyHeader
+from fastapi.middleware.cors import CORSMiddleware
 
 API_KEY = os.getenv("DOC_AI_API_KEY", "dev-key")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
 app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 key_header = APIKeyHeader(name="X-API-Key")
 
 def verify(key: str = Security(key_header)):
